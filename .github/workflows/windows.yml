@@ -1,25 +1,25 @@
-name: Build on Windows
+name: windows
 on:
   workflow_dispatch:
   push:
     branches:
-      - 'develop'
-      - 'master'
-      - 'test_workflow'
+      - 'main'
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.png'
+      - '**/*.jpg'
 
 jobs:
   build:
     runs-on: windows-2022
     steps:
-      - name: Clean workspace
-        shell: bash
-        run: |
-          echo "Cleaning up previous run"
-          rm -rf "${{ github.workspace }}/pico-sdk"
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v3
-      - name: Checkout submodules
-        run: git submodule update --init
+        with:
+          submodules: "recursive"
+          fetch-depth: 1
+
       - name: Install dependencies
         run: choco install .github/workflows/choco_packages.config
 

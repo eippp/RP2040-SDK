@@ -1,25 +1,25 @@
-name: Build on macOS
+name: macOS
 on:
   workflow_dispatch:
   push:
     branches:
-      - 'develop'
-      - 'master'
-      - 'test_workflow'
+      - 'main'
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.png'
+      - '**/*.jpg'
 
 jobs:
   build:
     runs-on: macos-12
     steps:
-      - name: Clean workspace
-        run: |
-          echo "Cleaning up previous run"
-          rm -rf "${{ github.workspace }}"
-          mkdir -p "${{ github.workspace }}"
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v3
-      - name: Checkout submodules
-        run: git submodule update --init
+        with:
+          submodules: "recursive"
+          fetch-depth: 1
+
       - name: Install dependencies
         run: |
           brew install cmake

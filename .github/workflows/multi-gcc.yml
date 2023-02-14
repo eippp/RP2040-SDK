@@ -1,28 +1,25 @@
-name: Multi GCC
+name: multi-gcc
 on:
   workflow_dispatch:
   push:
     branches:
-      - 'master'
-      - 'test_workflow'
+      - 'main'
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.png'
+      - '**/*.jpg'
 
 jobs:
   build:
-    if: github.repository_owner == 'raspberrypi'
-    runs-on: [self-hosted, Linux, X64]
-
+    if: github.repository_owner == 'SoCXin'
+    runs-on: ubuntu-latest
     steps:
-    - name: Clean workspace
-      run: |
-        echo "Cleaning up previous run"
-        rm -rf "${{ github.workspace }}"
-        mkdir -p "${{ github.workspace }}"
-
-    - name: Checkout repo
-      uses: actions/checkout@v2
-
-    - name: Checkout submodules
-      run: git submodule update --init
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: "recursive"
+        fetch-depth: 1
 
     - name: Get core count
       id: core_count
